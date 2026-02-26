@@ -222,8 +222,8 @@ cell findWord(cell address, cell len)
 
 void do_forth()
 {
-    cell datastack[1024];
-    cell returnstack[512];
+    cell   datastack[1024];
+    void** returnstack[512];
 }
 
 int main(int argc, char** argv)
