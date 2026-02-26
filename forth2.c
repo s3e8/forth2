@@ -1,7 +1,6 @@
 /* yet another attempt */
 
 #include <stdio.h>
-#include <stdlib.h>
 
 typedef struct forth_config 
 {
