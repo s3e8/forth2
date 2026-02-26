@@ -228,6 +228,7 @@ cell findWord(cell address, cell len)
 // docol (bytecode)
 
 #define OP(name) op_##name
+#define CODE(name) &&op_##name
 #define BUILTIN(name, code) OP(name) { code NEXT(); }
 
 
@@ -245,7 +246,43 @@ void do_forth()
     void***  nestingstack = nestingstack_space + 512;
     void**   ip = NULL;
 
+    register word_hdr_t* hdr;
+    register void*       code;
     
+
+    BUILTIN(DOCOL, 
+    {
+        code = tick(hdr);
+        *--nestingstack = ip;
+
+        if (word->flags & FLAG_BUILTIN)
+        {
+            code_immediatebuf[0] = code;
+            ip = code_immediatebuf;
+        } 
+        else {
+            word_immediatebuf[1] = code;
+            ip = word_immediatebuf;
+        }
+    })
+
+    BUILTIN(INTERPRET,
+    {
+        // get_next_word
+        // pop file_stack if eof?
+        // -- if file_stack empty, stream = stdin
+        // 
+        // find(current_word)
+        // if not found: goto CODE(PARSE_WORD_NOT_FOUND)
+        // -- if not number
+        // -- if number
+        // -- -- if state compile
+        // -- -- if state interpret
+        // if found:
+        // -- if state compile: goto CODE(COMPILE)???
+        // -- if state interpret: goto CODE(DOCOL)
+         
+    })
 }
 
 int main(int argc, char** argv)
