@@ -8,7 +8,8 @@ typedef struct forth_config
     size_t dictionary_size    = 10*1024*1024;
     size_t dstack_size        = 1024;
     size_t rstack_size        = 512;
-    
+    size_t nstack_size        = 512;
+    int    nstack_max_depth   = 512;
 } forth_config_t;
 
 /* The primary data output function. This is the place to change if you want
@@ -220,6 +221,9 @@ cell findWord(cell address, cell len)
     }
     return ret;
 }
+
+// tick
+// comma
 
 #define OP(name) op_##name
 #define BUILTIN(name, code) OP(name) { code NEXT(); }
