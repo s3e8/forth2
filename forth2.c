@@ -5,7 +5,10 @@
 
 typedef struct forth_config 
 {
-    int dictionary_size; // = default
+    size_t dictionary_size    = 10*1024*1024;
+    size_t dstack_size        = 1024;
+    size_t rstack_size        = 512;
+    
 } forth_config_t;
 
 /* The primary data output function. This is the place to change if you want
@@ -219,16 +222,20 @@ cell findWord(cell address, cell len)
 }
 
 #define OP(name) op_##name
+#define BUILTIN(name, code) OP(name) { code NEXT(); }
+
+
+
 
 void do_forth()
 {
     cell     datastack[1024];
     void**   returnstack[512];
-    void**   nestingstack_space[512];
     cell*    ds = datastack + 1024;
     void***  rs = returnstack + 512;
     cell*    s0 = ds;
     void***  r0 = rs;
+    void**   nestingstack_space[512];
     void***  nestingstack = nestingstack_space + 512;
     void**   ip = NULL;
 }
