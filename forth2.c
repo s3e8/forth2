@@ -10,6 +10,7 @@ typedef struct forth_config
     size_t rstack_size        = 512;
     size_t nstack_size        = 512;
     int    nstack_max_depth   = 512;
+    int    include_file_max_depth = 32;
 } forth_config_t;
 
 /* The primary data output function. This is the place to change if you want
@@ -222,8 +223,10 @@ cell findWord(cell address, cell len)
     return ret;
 }
 
-// tick
+// void* xt = tick(word);
 // comma
+// cfa
+// docol (bytecode)
 
 #define OP(name) op_##name
 #define BUILTIN(name, code) OP(name) { code NEXT(); }
@@ -242,6 +245,8 @@ void do_forth()
     void**   nestingstack_space[512];
     void***  nestingstack = nestingstack_space + 512;
     void**   ip = NULL;
+
+    
 }
 
 int main(int argc, char** argv)
