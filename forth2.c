@@ -222,16 +222,27 @@ cell findWord(cell address, cell len)
 
 void do_forth()
 {
-    cell   datastack[1024];
-    void** returnstack[512];
+    cell     datastack[1024];
+    void**   returnstack[512];
+    void**   nestingstack_space[512];
+    cell*    ds = datastack + 1024;
+    void***  rs = returnstack + 512;
+    cell*    s0 = ds;
+    void***  r0 = rs;
+    void***  nestingstack = nestingstack_space + 512;
+    void**   ip = NULL;
 }
 
 int main(int argc, char** argv)
 {
     OP(DOCOL):{}
+    
     OP(INTERPRET):{}
+    
     OP(LIT):{}
+    
     OP(EXIT):{}
+    
     OP(EOW):{}
     
     return 0;
