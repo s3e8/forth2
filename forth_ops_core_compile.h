@@ -29,12 +29,12 @@ BUILTIN(TICK,
     header = find( get_next_word() );
     if (header)
     {
-        cell token = tick(header); // todo: can change to tmp register later...
+        xt = tick(header); // todo: can change to tmp register later...
         
-        if (state == STATE_IMMEDIATE) PUSH(token);
+        if (state == STATE_IMMEDIATE) PUSH((cell)xt); // todo: is xt still a thing?
         else {
             comma((cell)CODE(LIT));
-            comma(token);
+            comma((cell)xt);
         }
     }
 })

@@ -386,6 +386,7 @@ extern void start_forth(forth_config_t* config)
     register char* address; // todo: shouldn't this be cell?
     register void* code;
     register void* fn;
+    register void* xt;
     register cell  value;
     register cell  tmp;
     register cell  a;
@@ -436,6 +437,8 @@ extern void start_forth(forth_config_t* config)
     defcode("'",            CODE(TICK),         FLAG_IMMEDIATE);
     defcode(",",            CODE(COMMA),        0);
     defcode("immediate",    CODE(IMMEDIATE),    FLAG_IMMEDIATE);
+    // memory //
+    defcode("@",            CODE(FETCH),        0);
 
 
     
@@ -550,15 +553,7 @@ extern void start_forth(forth_config_t* config)
         ip = POPRS();
     })
 
-    // builtins
-    #include "forth_ops_core_inner.h"
-    #include "forth_ops_core_compile.h"
-    #include "forth_ops_core_rstack.h"
-    #include "forth_ops_core_dstack.h"
-    #include "forth_ops_core_math.h"
-    #include "forth_ops_core_sys.h"
-    #include "forth_ops_core_dbg.h"
-
+    #include "forth_ops_core_all.h"
 }
 
 int main(int argc, char** argv)
