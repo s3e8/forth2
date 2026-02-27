@@ -75,13 +75,13 @@ static char* remaining_words = NULL;
 
 static void skip_whitespace() 
 {
-  while(isspace(remaining_words)) remaining_words++;
+    while(isspace(*remaining_words)) remaining_words++;
 }
 
 static cell is_eol()
 {
-  skip_whitespace();
-  return (cell)(*remaining_words == '\0');
+    skip_whitespace();
+    return (cell)(*remaining_words == '\0');
 }
 
 static cell is_eof()
@@ -91,6 +91,7 @@ static cell is_eof()
 
 static char* get_next_line()
 {
+    printf("getting next line...\n");
     if (current_stream == stdin)
     {
         printf("forth> ");
@@ -113,7 +114,7 @@ static char* get_next_word()
     {
         // Skip whitespace using isspace() for all whitespace characters
         while (*remaining_words && isspace(*remaining_words))
-        {
+        { // todo: match with skip_whitespace
             remaining_words++;
         }
 
@@ -122,8 +123,9 @@ static char* get_next_word()
         {
             // printf("Buffer exhausted, getting next line...\n");
             if (!get_next_line())
-            {
-                printf("No more lines, returning NULL\n");
+            { 
+                // todo: should I set stream to stdin here?
+                // printf("No more lines, returning NULL\n");
                 current_word[0] = '\0';
                 return NULL;
             }
@@ -146,13 +148,13 @@ static char* get_next_word()
     return current_word;;
 }
 
-static cell is_number(const char* token, cell result, cell base) {
-    char *endptr; // todo: token is current_work, remove arg
-    result = (cell)strtol(token, &endptr, (int)base);
+// static cell is_number(const char* token, cell result, cell base) {
+//     char *endptr; // todo: token is current_work, remove arg
+//     result = (cell)strtol(token, &endptr, (int)base);
     
-    // Success if we consumed the whole string and it wasn't empty
-    return (*endptr == '\0' && endptr != token);
-}
+//     // Success if we consumed the whole string and it wasn't empty
+//     return (*endptr == '\0' && endptr != token);
+// }
 
 static int key(reader_state_t* reader_state)
 {
@@ -317,7 +319,14 @@ extern int init_forth(forth_config_t* config)
     config->wordbuf_length  = WORDBUF_LENGTH;
     config->linebuf_length  = LINEBUF_LENGTH;
 
-    current_stream  = stdin;
+    FILE* bootstrap = fopen("forth.f", "r");
+    if (!bootstrap) {
+        // fprintf(stderr, "Cannot open file: %s\n", bootstrap);
+        // fprintf(stderr, "Falling back to stdin\n");
+        bootstrap = stdin;
+    }
+
+    current_stream  = bootstrap;
     word_length     = WORDBUF_LENGTH;
     line_length     = LINEBUF_LENGTH;
     current_word    = malloc(WORDBUF_LENGTH);
@@ -398,11 +407,38 @@ extern void start_forth(forth_config_t* config)
     defcode("exit",         CODE(EXIT),         0);
     /// END WORDS NEEDED FOR INNER INTERPRETER ///
     //////////////////////////////////////////////
+
+    /// VARIABLE & CONST ACCESSORS (some defined as bytecode) ///
+    defconst("version",     FORTH_VERSION);
+    defconst("f_builtin",   FLAG_BUILTIN);
+    defconst("f_hasarg",    FLAG_HASARG);
+    defconst("f_immediate", FLAG_IMMEDIATE);
+    defconst("f_hidden",    FLAG_HIDDEN);
+    defconst("f_inline",    FLAG_INLINE);
+    defconst("f_deferred",  FLAG_DEFERRED);
+    defconst("cellsize",    (cell) sizeof(cell));
+    defconst("floatsize",   (cell) sizeof(float));
+    defconst("headersize",  (cell) sizeof(word_header_t));
+    defconst("here",        (cell) &here); // we give the address so we can store stuff there
+    defconst("here0",       (cell) here0);
+    defconst("s0",          (cell) &s0);
+    defconst("r0",          (cell) &r0);
+    defconst("state",       (cell) &state); // todo: should this be a const or a code...
+    defconst("base",        (cell) &base);
+
+    // inner //
+    defcode("latest",       CODE(LATEST),       0); // bytecode, since it's a C var that changes
+    defcode("immediate",    CODE(IMMEDIATE),    FLAG_IMMEDIATE);
+    defcode("0branch",      CODE(ZBRANCH),      0);
+
+
+    
+
     // sys //
     defcode("bye",          CODE(BYE),          0);
     defcode("die",          CODE(DIE),          0);
     // dbg //
-    defcode("ps",           CODE(PRINT_STACK),  0); 
+    defcode("ps",           CODE(PRINT_STACK),  0);
 
     ip = quit;
     NEXT();
@@ -432,7 +468,7 @@ extern void start_forth(forth_config_t* config)
         {
             if (is_eof() && current_stream != stdin) 
                 current_stream = stdin; // todo: this still fires even if stream == stdin
-            
+                
             NEXT();
         }
 
@@ -508,29 +544,12 @@ extern void start_forth(forth_config_t* config)
         ip = POPRS();
     })
 
-    BUILTIN(DIE, { return; })
-
-    BUILTIN(BYE, 
-    {
-        printf("bye bye now\n"); 
-        return; // goto OP(DIE); ??
-    })
-
-    BUILTIN(PRINT_STACK, 
-    {
-        printf("[ ps ]\n");
-        print_stack(ds, s0);
-    })
-
-    BUILTIN(TODO,
-    {
-        printf("[ ps ]\n");
-        todo(current_word); 
-        return;
-    })
-
-    // #include "forth_ops_core_inner.h"
-    // #include "forth_ops_core_math.h"
+    #include "forth_ops_core_inner.h"
+    #include "forth_ops_core_dstack.h"
+    #include "forth_ops_core_rstack.h"
+    #include "forth_ops_core_math.h"
+    #include "forth_ops_core_sys.h"
+    #include "forth_ops_core_dbg.h"
 
 }
 
@@ -538,6 +557,7 @@ int main(int argc, char** argv)
 {
     forth_config_t forth_config;
     init_forth(&forth_config);
+    // todo: ideally we can defcode some more stuff here... 
     start_forth(&forth_config);
     free_forth();
     
