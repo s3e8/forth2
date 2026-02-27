@@ -401,7 +401,7 @@ extern void start_forth(forth_config_t* config)
     defcode("interpret",    CODE(INTERPRET),    0);
     defcode("branch",       CODE(BRANCH),       FLAG_HASARG);
     defcode("eow",          CODE(EOW),          0);
-    defcode("call",         CODE(TODO),         FLAG_HASARG);
+    defcode("call",         CODE(CALL),         FLAG_HASARG); // for scheduling 
     defcode("ireturn",      CODE(IRETURN),      0);
     defcode("lit",          CODE(LIT),          FLAG_HASARG);
     defcode("exit",         CODE(EXIT),         0);
@@ -419,8 +419,9 @@ extern void start_forth(forth_config_t* config)
     defconst("cellsize",    (cell) sizeof(cell));
     defconst("floatsize",   (cell) sizeof(float));
     defconst("headersize",  (cell) sizeof(word_header_t));
+    // todo: make here... bytecode? like latest..
     defconst("here",        (cell) &here); // we give the address so we can store stuff there
-    defconst("here0",       (cell) here0);
+    defconst("here0",       (cell) here0); // todo: why not &here0? cause malloc?
     defconst("s0",          (cell) &s0);
     defconst("r0",          (cell) &r0);
     defconst("state",       (cell) &state); // todo: should this be a const or a code...
@@ -433,6 +434,7 @@ extern void start_forth(forth_config_t* config)
     defcode(":",            CODE(COLON),        0);
     defcode(";",            CODE(SEMICOLON),    FLAG_IMMEDIATE);
     defcode("'",            CODE(TICK),         FLAG_IMMEDIATE);
+    defcode(",",            CODE(COMMA),        0);
     defcode("immediate",    CODE(IMMEDIATE),    FLAG_IMMEDIATE);
 
 

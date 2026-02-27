@@ -39,6 +39,14 @@ BUILTIN(TICK,
     }
 })
 
+BUILTIN(COMMA,
+{
+    printf("[ , ]\n");
+
+    value = POP();
+    comma(value);
+})
+
 BUILTIN(IMMEDIATE,
 {
     printf("[ immediate ]\n");
