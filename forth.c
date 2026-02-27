@@ -527,6 +527,9 @@ extern void start_forth(forth_config_t* config)
         return;
     })
 
+    // #include "forth_ops_core_inner.h"
+    // #include "forth_ops_core_math.h"
+
 }
 
 int main(int argc, char** argv)
