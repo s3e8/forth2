@@ -120,7 +120,7 @@ static char* get_next_word()
         // If we're at the end of the current buffer
         if (*remaining_words == '\0')
         {
-            printf("Buffer exhausted, getting next line...\n");
+            // printf("Buffer exhausted, getting next line...\n");
             if (!get_next_line())
             {
                 printf("No more lines, returning NULL\n");
@@ -441,8 +441,10 @@ extern void start_forth(forth_config_t* config)
 
         if (!header)
         {
-            cell number;
-            if (!is_number(current_word, number, base))
+            char* endptr = NULL;
+            cell number = (cell)strtol(current_word, &endptr, (int)base);
+
+            if (*endptr != '\0')
             {
                 printf("unknown word: %s\n", current_word);
                 NEXT();
