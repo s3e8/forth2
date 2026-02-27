@@ -428,8 +428,12 @@ extern void start_forth(forth_config_t* config)
 
     // inner //
     defcode("latest",       CODE(LATEST),       0); // bytecode, since it's a C var that changes
-    defcode("immediate",    CODE(IMMEDIATE),    FLAG_IMMEDIATE);
     defcode("0branch",      CODE(ZBRANCH),      0);
+    // compile //
+    defcode(":",            CODE(COLON),        0);
+    defcode(";",            CODE(SEMICOLON),    FLAG_IMMEDIATE);
+    defcode("'",            CODE(TICK),         FLAG_IMMEDIATE);
+    defcode("immediate",    CODE(IMMEDIATE),    FLAG_IMMEDIATE);
 
 
     
@@ -544,9 +548,11 @@ extern void start_forth(forth_config_t* config)
         ip = POPRS();
     })
 
+    // builtins
     #include "forth_ops_core_inner.h"
-    #include "forth_ops_core_dstack.h"
+    #include "forth_ops_core_compile.h"
     #include "forth_ops_core_rstack.h"
+    #include "forth_ops_core_dstack.h"
     #include "forth_ops_core_math.h"
     #include "forth_ops_core_sys.h"
     #include "forth_ops_core_dbg.h"
