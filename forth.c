@@ -424,7 +424,7 @@ extern void start_forth(forth_config_t* config)
     defcode(";",            CODE(SEMICOLON),    FLAG_IMMEDIATE);
     defcode("'",            CODE(TICK),         FLAG_IMMEDIATE);
     defcode(",",            CODE(COMMA),        0);
-    defcode("compile",      CODE(COMPILE),      FLAG_IMMEDIATE);
+    // defcode("compile",      CODE(COMPILE),      FLAG_IMMEDIATE);
     defcode("immediate",    CODE(IMMEDIATE),    FLAG_IMMEDIATE);
 
     // memory //
@@ -440,6 +440,9 @@ extern void start_forth(forth_config_t* config)
     // math //
     defcode("+",            CODE(ADD),          0);
     defcode("-",            CODE(SUB),          0);
+
+    // io //
+    defcode("word",         CODE(WORD),         0);
     
 
     // sys //

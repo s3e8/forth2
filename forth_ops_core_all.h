@@ -3,6 +3,8 @@
 #include "forth_ops_core_memory.h"
 #include "forth_ops_core_rstack.h"
 #include "forth_ops_core_dstack.h"
+#include "forth_ops_core_dict.h"
 #include "forth_ops_core_math.h"
 #include "forth_ops_core_sys.h"
+#include "forth_ops_core_io.h"
 #include "forth_ops_core_dbg.h"
