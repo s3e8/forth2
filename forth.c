@@ -512,7 +512,10 @@ extern void start_forth(forth_config_t* config)
         if (state == STATE_COMPILE && !(header->flags & FLAG_IMMEDIATE))
         { // todo: use xt 'register'? 
             if (header->flags & FLAG_BUILTIN) comma((cell)tick(header));
-            else comma((cell)tick(header)); // todo: slarba for some reason uses CALL here... but CALL is already in word_immediatebuf...
+            else {
+                comma((cell) CODE(CALL));
+                comma((cell)tick(header)); // todo: slarba for some reason uses CALL here... but CALL is already in word_immediatebuf...
+            }
         }
         else { /* state == STATE_IMMEDIATE || word->flags & FLAG_IMMEDIATE */
             goto OP(DOCOL);
