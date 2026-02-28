@@ -28,9 +28,32 @@ BUILTIN(SWAP,
 
     // print_stack(ds, s0);
 
-    cell b = POP();      // Remove top value (b)
-    cell a = POP();      // Remove next value (a)
+    // cell b = POP();      // Remove top value (b)
+    // cell a = POP();      // Remove next value (a)
 
-    PUSH(b);             // Push b first
-    PUSH(a);             // Then push a
+    // PUSH(b);             // Push b first
+    // PUSH(a);             // Then push a
+
+    tmp = AT(1);
+    AT(1) = AT(0);
+    AT(0) = tmp;
 })
+
+BUILTIN(DROP, 
+{ 
+    printf("[ drop ]\n");
+    ds++; 
+})
+
+BUILTIN(OVER, 
+{ 
+    printf("[ over ]\n");
+
+    tmp = AT(1); 
+    PUSH(tmp); 
+})
+
+// BUILTIN(DUP,  { tmp = TOP(); PUSH(tmp); })
+// BUILTIN(SWAP, { a = POP(); b = POP(); PUSH(a); PUSH(b); })
+// BUILTIN(DROP, { ds++; })
+// BUILTIN(OVER, { tmp = AT(1); PUSH(tmp); })

@@ -431,17 +431,27 @@ extern void start_forth(forth_config_t* config)
     // inner //
     defcode("latest",       CODE(LATEST),       0); // bytecode, since it's a C var that changes
     defcode("0branch",      CODE(0BRANCH),      0);
+
     // compile //
     defcode(":",            CODE(COLON),        0);
     defcode(";",            CODE(SEMICOLON),    FLAG_IMMEDIATE);
     defcode("'",            CODE(TICK),         FLAG_IMMEDIATE);
     defcode(",",            CODE(COMMA),        0);
     defcode("immediate",    CODE(IMMEDIATE),    FLAG_IMMEDIATE);
+
     // memory //
     defcode("@",            CODE(FETCH),        0);
     defcode("!",            CODE(STORE),        0);
+    
+    // dstack //
+    defcode("dup",          CODE(DUP),          0);
+    defcode("swap",         CODE(SWAP),         0);
+    defcode("drop",         CODE(DROP),         0);
+    defcode("over",         CODE(OVER),         0);
 
-
+    // math //
+    defcode("+",            CODE(ADD),          0);
+    defcode("-",            CODE(SUB),          0);
     
 
     // sys //
@@ -509,6 +519,11 @@ extern void start_forth(forth_config_t* config)
             NEXT();
         }
 
+        printf("word: %s flags: %ld immediate: %s state: %d\n", 
+            header->name, 
+            header->flags,
+            (header->flags & FLAG_IMMEDIATE) ? "yes" : "no",
+            state);
         if (state == STATE_COMPILE && !(header->flags & FLAG_IMMEDIATE))
         { // todo: use xt 'register'? 
             if (header->flags & FLAG_BUILTIN) comma((cell)tick(header));
