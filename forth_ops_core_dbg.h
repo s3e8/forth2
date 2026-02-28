@@ -1,7 +1,11 @@
 BUILTIN(PRINT_STACK, 
 {
     printf("[ ps ]\n");
-    print_stack(ds, s0);
+
+    printf("stack: [ ");
+    for (cell* p = ds; p < s0; p++)
+        printf("%ld ", (long)*p);
+    printf("]\n");
 })
 
 BUILTIN(TODO,

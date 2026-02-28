@@ -294,20 +294,6 @@ static void todo(const char* name) { printf("word not implemented: %s\n", name);
 #define PUSH(x)     (*--ds = (cell)(x))     // grow/decrement downward first, then store
 #define POP()       (*ds++)                 // pop, then shrink upward
 
-static void print_stack(cell* ds, cell* s0)
-{
-    printf("stack: [ ");
-    // for (cell* p = ds; p < s0; p++)
-    //     printf("%ld ", (long)*p);
-    for (cell* p = s0 - 1; p >= ds; p--)
-        printf("%ld ", (long)*p);
-    printf("]\n");
-}
-// void* xt = tick(word);
-// comma
-// cfa
-// docol (bytecode)
-
 extern int init_forth(forth_config_t* config)
 {
     if (!config) return 1;
