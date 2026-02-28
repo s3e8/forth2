@@ -408,7 +408,7 @@ extern void start_forth(forth_config_t* config)
     defconst("floatsize",   (cell) sizeof(float));
     defconst("headersize",  (cell) sizeof(word_header_t));
     // todo: make here... bytecode? like latest..
-    defconst("here",        (cell) &here); // we give the address so we can store stuff there
+    defconst("dp",          (cell) &here); // we give the address so we can store stuff there
     defconst("here0",       (cell) here0); // todo: why not &here0? cause malloc?
     defconst("s0",          (cell) &s0);
     defconst("r0",          (cell) &r0);
@@ -424,6 +424,7 @@ extern void start_forth(forth_config_t* config)
     defcode(";",            CODE(SEMICOLON),    FLAG_IMMEDIATE);
     defcode("'",            CODE(TICK),         FLAG_IMMEDIATE);
     defcode(",",            CODE(COMMA),        0);
+    defcode("compile",      CODE(COMPILE),      FLAG_IMMEDIATE);
     defcode("immediate",    CODE(IMMEDIATE),    FLAG_IMMEDIATE);
 
     // memory //
@@ -501,8 +502,7 @@ extern void start_forth(forth_config_t* config)
                 else if (state == STATE_IMMEDIATE) { PUSH(number); }
                 else { printf("error: Compiler state out of bounds. Should be either 0 or 1.\n"); return; }
             }
-
-            print_stack(ds, s0);
+            
             NEXT();
         }
 

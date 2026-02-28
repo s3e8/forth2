@@ -1,21 +1,7 @@
-: if immediate
-    ' 0branch ,
-    here @ 
-    0 ,
-;
+: here      dp @ ;
+: >mark     here 0 , ;
+: >resolve  here swap ! ;
 
-: then immediate
-    dup
-    here @ swap -
-    swap !
-;
-
-: else immediate
-    ' branch ,
-    here @
-    0 ,
-    swap
-    dup
-    here @ swap -
-    swap !
-;
+: if        ' 0branch , >mark  ; immediate
+: then      dup here swap - swap ! ; immediate
+: else      ' branch , >mark swap dup here swap - swap ! ; immediate

@@ -47,6 +47,33 @@ BUILTIN(COMMA,
     comma(value);
 })
 
+BUILTIN(COMPILE,
+{
+    printf("[ compile ]\n");
+
+    // COMPILE is IMMEDIATE - it runs during compilation
+    // It takes the NEXT word from input and compiles its XT
+    // WITHOUT executing it
+
+    header = NULL;
+    header = find( get_next_word() );
+    if (header)
+    {
+        printf("word: %s...\n", header->name);
+        
+        if (header->flags & FLAG_BUILTIN)
+        {
+            printf("compiling builtin...\n");
+            comma((cell)tick(header));
+        }
+        else {
+            printf("compiling word...\n");
+            comma((cell)CODE(CALL));
+            comma((cell)tick(header));
+        }
+    }
+})
+
 BUILTIN(IMMEDIATE,
 {
     printf("[ immediate ]\n");

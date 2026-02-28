@@ -2,3 +2,4 @@
 - pros/cons of declaring all forth stuff inside do_forth?
 - move here_size to forth_config?
 - do i need init_dictionary or dictionary_state at all? is it useful to be able to initialize in main?
+- here  = dp here = dp @
