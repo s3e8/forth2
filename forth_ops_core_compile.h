@@ -84,3 +84,11 @@ BUILTIN(IMMEDIATE,
     // word_header_t* word_header = (word_header_t*)POP();
     // word_header->flags ^= FLAG_IMMEDIATE;
 })
+
+// : make-inline
+//     latest @ dup
+//     @ f_inline xor
+//     swap !
+// ;
+
+// : inline immediate make-inline ;
