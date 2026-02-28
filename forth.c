@@ -223,7 +223,7 @@ static word_header_t* find(const char* name)
 
         word = word->next_word;
     }
-    
+
     return NULL;
 }
 
@@ -520,11 +520,6 @@ extern void start_forth(forth_config_t* config)
             NEXT();
         }
 
-        printf("word: %s flags: %ld immediate: %s state: %d\n", 
-            header->name, 
-            header->flags,
-            (header->flags & FLAG_IMMEDIATE) ? "yes" : "no",
-            state);
         if (state == STATE_COMPILE && !(header->flags & FLAG_IMMEDIATE))
         { // todo: use xt 'register'? 
             if (header->flags & FLAG_BUILTIN) comma((cell)tick(header));
