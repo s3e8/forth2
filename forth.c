@@ -223,8 +223,7 @@ static word_header_t* find(const char* name)
 
         word = word->next_word;
     }
-
-    printf("'%s' not found...\n", name);
+    
     return NULL;
 }
 
@@ -298,7 +297,9 @@ static void todo(const char* name) { printf("word not implemented: %s\n", name);
 static void print_stack(cell* ds, cell* s0)
 {
     printf("stack: [ ");
-    for (cell* p = ds; p < s0; p++)
+    // for (cell* p = ds; p < s0; p++)
+    //     printf("%ld ", (long)*p);
+    for (cell* p = s0 - 1; p >= ds; p--)
         printf("%ld ", (long)*p);
     printf("]\n");
 }
