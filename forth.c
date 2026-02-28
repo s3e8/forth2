@@ -430,7 +430,7 @@ extern void start_forth(forth_config_t* config)
 
     // inner //
     defcode("latest",       CODE(LATEST),       0); // bytecode, since it's a C var that changes
-    defcode("0branch",      CODE(ZBRANCH),      0);
+    defcode("0branch",      CODE(0BRANCH),      0);
     // compile //
     defcode(":",            CODE(COLON),        0);
     defcode(";",            CODE(SEMICOLON),    FLAG_IMMEDIATE);
@@ -439,6 +439,7 @@ extern void start_forth(forth_config_t* config)
     defcode("immediate",    CODE(IMMEDIATE),    FLAG_IMMEDIATE);
     // memory //
     defcode("@",            CODE(FETCH),        0);
+    defcode("!",            CODE(STORE),        0);
 
 
     
